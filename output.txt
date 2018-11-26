@@ -1,0 +1,46 @@
+@ Chrome File Edit View History Bookmarks People Window Help = SunNov25 7:29PM Q
+
+ 
+
+@8@ Mo inbox & Feed Bl Mess oO Yaniv Bl Yet A g@ Goog | M Inbo Bl Italy Goog | «= Gift C | |g} Welcc | vso Bene’ | vso Full F Ee] Contr | €) spee Bette Pythe | ©) jakut You'r pysc @ De x +
+€ Cc @ https://www.learnopencv.com/deep-learning-based-text-recognition-ocr-using-tesseract-and-opencv/ Ww Ga p 4 6 * Oo ®@ B ©
+
+HT Apps ye Bookmarks [} notepad (% wikiproj [& crf_chat [J bg-dashboards [% BG Player [& splines, clouds, p...
+
+Learn O)er-lal@nvs HOME ABOUT RESOURCES AI CONSULTING COURSES
+
+ 
+
+Note: When the PSM is not specified, it defaults to 3 in the command line
+
+and python versions, but to 6 in the C++ API. If you are not getting the
+same results using the command line version and the C++ API, explicitly
+set the PSM.
+
+2.1. Command Line Usage
+
+The examples below show how to perform OCR using tesseract command
+line tool. The language is chosen to be English and the OCR engine mode is
+set to 1 (i.e. LSTM only ).
+
+# Output to terminal
+
+tesseract image.jpg stdout -1 eng --oem 1 --psm 3
+# Output to output.txt
+
+tesseract image.jpg output -l eng --oem 1 --psm 3
+
+2.2. Using pytesseract
+
+In Python, we use the pytesseract module. It is simply a wrapper around the
+command line tool with the command line options specified using the config
+argument. The basic usage requires us to first read the image using OpenCV
+and pass the image to image_to_string method of the pytesseract class
+along with the language (eng).
+
+import cv2
+import sys
+import pytesseract
+
+ 
+
