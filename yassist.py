@@ -27,6 +27,9 @@ from Quartz import (
 import itertools
 import rumps
 
+standard_python_errors = ['AssertionError', 'AttributeError', 'EOFError', 'FloatingPointError', 'GeneratorExit', 'ImportError', 'IndexError', 'KeyError', 'KeyboardInterrupt', 'MemoryError', 'NameError', 'NotImplementedError', 'OSError', 'OverflowError', 'ReferenceError',
+                          'RuntimeError', 'StopIteration', 'SyntaxError', 'IndentationError', 'TabError', 'SystemError', 'SystemExit', 'TypeError', 'UnboundLocalError', 'UnicodeError', 'UnicodeEncodeError', 'UnicodeDecodeError', 'UnicodeTranslateError', 'ValueError', 'ZeroDivisionError', 'ModuleNotFoundError']
+
 
 def getActiveInfo():
     app = NSWorkspace.sharedWorkspace().frontmostApplication()
@@ -47,9 +50,14 @@ def getActiveInfo():
 
 def findErrors(text):
     res = []
-    for match in re.finditer('Traceback', text):
-        surrounding_text = text[match.start():match.end() + 1000]
-        print('"""' + surrounding_text + '"""')
+    errors_ored = '|'.join(x for x in standard_python_errors)
+    # print(errors_ored)
+    for match in re.finditer('(' + errors_ored + ')', text):
+        # print(match)
+        # print(match.start())
+        # print(match.end())
+        surrounding_text = text[match.start(): match.end() + 1000]
+        # print('"""' + surrounding_text.split('\n') + '"""')
         important_line = surrounding_text.split('\n')[3]
         res.append(important_line)
     return res
@@ -60,6 +68,8 @@ def values_to_ints(d): return dict((k, int(v)) for k, v in d.items())
 
 def getError():
     windowNumber, ownerName, geometry, windowTitle = getActiveInfo()
+    if ownerName != 'Terminal':
+        return None  # only look for errors in the terminal
     geometry = values_to_ints(geometry)
     print(windowTitle)
     print('Screenshoting...')
@@ -72,8 +82,8 @@ def getError():
     print('Finding errors...')
     errors = findErrors(text)
     print(errors)
-    for error in errors:
-        print(error)
+    # for error in errors:
+    #     print(error)
     return errors
 
 
