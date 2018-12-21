@@ -6,15 +6,17 @@
 # browser = webdriver.Chrome(executable_path=DRIVER_BIN)
 # browser.get('http://www.baidu.com/')
 
-import webbrowser
-
+import sys
+import mss_wrapper
+from mss import mss
 import pytesseract
 from PIL import Image
 # import pyscreenshot as ImageGrab
-import screenshot
+# import screenshot
 import time
 import re
 import sys
+import webbrowser
 
 import applescript
 from AppKit import NSWorkspace
@@ -51,14 +53,10 @@ def getActiveInfo():
 def findErrors(text):
     res = []
     errors_ored = '|'.join(x for x in standard_python_errors)
-    # print(errors_ored)
     for match in re.finditer('(' + errors_ored + ')', text):
-        # print(match)
-        # print(match.start())
-        # print(match.end())
         surrounding_text = text[match.start(): match.end() + 1000]
         # print('"""' + surrounding_text.split('\n') + '"""')
-        important_line = surrounding_text.split('\n')[3]
+        important_line = surrounding_text.split('\n')[0]
         res.append(important_line)
     return res
 
@@ -73,12 +71,18 @@ def getError():
     geometry = values_to_ints(geometry)
     print(windowTitle)
     print('Screenshoting...')
-    rect = geometry['X'], geometry['Y'], geometry['Width'], geometry['Height']
-    print(rect)
-    im = screenshot.screenshot(rect)
+    rect = {'left': geometry['X'], 'top': geometry['Y'],
+            'width': geometry['Width'], 'height': geometry['Height']}
+    # rect = geometry['X'], geometry['Y'], geometry['Width'], geometry['Height']
+    # print(rect)
+    # im = screenshot.screenshot(rect)
     # im.show()
+    # im = mss_screenshot_to_pil()
+    # im.show()
+    im = mss_wrapper.screenshot(rect)
     print('OCRing...')
     text = pytesseract.image_to_string(im)
+    print(f'Found: {repr(text)}')
     print('Finding errors...')
     errors = findErrors(text)
     print(errors)

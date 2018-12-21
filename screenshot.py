@@ -25,7 +25,7 @@ def screenshot(region=None):
         CG.kCGNullWindowID,
         CG.kCGWindowImageDefault)
 
-    dpi = 72  # FIXME: Should query this from somewhere, e.g for retina displays
+    dpi = 221  # 72  # FIXME: Should query this from somewhere, e.g for retina displays
 
     url = NSURL.fileURLWithPath_(TMP_PATH)
 
